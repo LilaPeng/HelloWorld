@@ -1,1 +1,5 @@
-I was modified in branch master.
+<<<<<<< HEAD
+I was modified in merging.
+=======
+I was modified in merging.
+>>>>>>> feature01
