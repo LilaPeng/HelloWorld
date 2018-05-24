@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-runoob.com,modified in branch change_site.
-=======
-runoob.com,modified in branch change_site.
->>>>>>> change_site
