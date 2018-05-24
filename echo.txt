@@ -1,5 +1,0 @@
-<<<<<<< HEAD
-I was modified in merging.
-=======
-I was modified in merging.
->>>>>>> feature01
