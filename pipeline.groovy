@@ -3,7 +3,7 @@ def devQAStaging() {
   
     stage ('Dev'){
     sh 'mvn -o clean package'
-    archiveArtifacts '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar'
+    archiveArtifacts 'target/helloworld-1.0-SNAPSHOT.jar'
     }
     stage ('QA'){
     parallel(longerTests: {
@@ -17,7 +17,7 @@ def devQAStaging() {
     })
     }
     stage ('Staging'){
-    deploy '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar', 'staging'
+    deploy 'target/helloworld-1.0-SNAPSHOT.jar', 'staging'
     } 
 }
 
@@ -31,8 +31,8 @@ def production() {
     stage('Production'){
     node('master') {
         sh 'curl -I http://localhost:8080/staging/'
-        unarchiveArtifacts mapping: ['/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar' : 'helloworld-1.0-SNAPSHOT.war']
-        deploy 'helloworld-1.0-SNAPSHOT.war', 'production'
+        unarchiveArtifacts mapping: ['target/helloworld-1.0-SNAPSHOT.jar' : 'helloworld-1.0-SNAPSHOT.war']
+        deploy 'helloworld-1.0-SNAPSHOT.jar', 'production'
         echo 'Deployed to http://localhost:8080/production/'
     }
   }
@@ -48,7 +48,7 @@ def undeploy(id) {
 
 def runWithServer(body) {
     def id = UUID.randomUUID().toString()
-    deploy '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar', id
+    deploy 'target/helloworld-1.0-SNAPSHOT.jar', id
     try {
         body.call "http://localhost:8080/${id}/"
     } finally {
