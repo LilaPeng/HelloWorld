@@ -31,7 +31,7 @@ def production() {
     } catch (NoSuchMethodError _) {
         echo 'Checkpoint feature available in Jenkins Enterprise by CloudBees.'
     }
-    stage('Production){
+    stage('Production'){
     node('master') {
         sh 'curl -I http://localhost:8080/staging/'
         unarchive mapping: ['/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar' : 'helloworld-1.0-SNAPSHOT.war']
