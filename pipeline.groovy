@@ -1,10 +1,11 @@
 def devQAStaging() {
     env.PATH="${tool 'mvn'}/bin:${env.PATH}"
-    stage 'Dev'
+    stages{
+    stage ('Dev'){
     sh 'mvn -o clean package'
     archive 'target/x.jar'
-
-    stage 'QA'
+    }
+    stage ('QA'){
 
     parallel(longerTests: {
         runWithServer {url ->
@@ -15,8 +16,12 @@ def devQAStaging() {
             sh "mvn -o -f sometests/pom.xml test -Durl=${url} -Dduration=20"
         }
     })
-    stage name: 'Staging', concurrency: 1
+    }
+    stage ('Staging'){
     deploy 'target/x.jar', 'staging'
+    }
+    }
+    
 }
 
 def production() {
@@ -26,13 +31,14 @@ def production() {
     } catch (NoSuchMethodError _) {
         echo 'Checkpoint feature available in Jenkins Enterprise by CloudBees.'
     }
-    stage name: 'Production', concurrency: 1
+    stage('Production){
     node('master') {
         sh 'curl -I http://localhost:8080/staging/'
         unarchive mapping: ['target/x.jar' : 'x.war']
         deploy 'x.war', 'production'
         echo 'Deployed to http://localhost:8080/production/'
     }
+  }
 }
 
 def deploy(war, id) {
