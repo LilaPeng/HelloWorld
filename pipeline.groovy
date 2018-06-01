@@ -1,6 +1,6 @@
 def devQAStaging() {
     env.PATH="${tool 'mvn'}/bin:${env.PATH}"
-    stages{
+  
     stage ('Dev'){
     sh 'mvn -o clean package'
     archive '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar'
@@ -19,9 +19,7 @@ def devQAStaging() {
     }
     stage ('Staging'){
     deploy '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar', 'staging'
-    }
-    }
-    
+    } 
 }
 
 def production() {
