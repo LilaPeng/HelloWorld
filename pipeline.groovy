@@ -3,7 +3,7 @@ def devQAStaging() {
     stages{
     stage ('Dev'){
     sh 'mvn -o clean package'
-    archive 'target/x.jar'
+    archive '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar'
     }
     stage ('QA'){
 
@@ -18,7 +18,7 @@ def devQAStaging() {
     })
     }
     stage ('Staging'){
-    deploy 'target/x.jar', 'staging'
+    deploy '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar', 'staging'
     }
     }
     
@@ -34,7 +34,7 @@ def production() {
     stage('Production){
     node('master') {
         sh 'curl -I http://localhost:8080/staging/'
-        unarchive mapping: ['target/x.jar' : 'x.war']
+        unarchive mapping: ['/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar' : 'helloworld-1.0-SNAPSHOT.war']
         deploy 'x.war', 'production'
         echo 'Deployed to http://localhost:8080/production/'
     }
@@ -51,7 +51,7 @@ def undeploy(id) {
 
 def runWithServer(body) {
     def id = UUID.randomUUID().toString()
-    deploy 'target/x.jar', id
+    deploy '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar', id
     try {
         body.call "http://localhost:8080/${id}/"
     } finally {
