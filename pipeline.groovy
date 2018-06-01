@@ -3,10 +3,9 @@ def devQAStaging() {
   
     stage ('Dev'){
     sh 'mvn -o clean package'
-    archive '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar'
+    archiveArtifacts '/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar'
     }
     stage ('QA'){
-
     parallel(longerTests: {
         runWithServer {url ->
             sh "mvn -o -f sometests/pom.xml test -Durl=${url} -Dduration=30"
@@ -32,15 +31,15 @@ def production() {
     stage('Production'){
     node('master') {
         sh 'curl -I http://localhost:8080/staging/'
-        unarchive mapping: ['/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar' : 'helloworld-1.0-SNAPSHOT.war']
-        deploy 'x.war', 'production'
+        unarchiveArtifacts mapping: ['/var/lib/jenkins/workspace/groovytest02/target/helloworld-1.0-SNAPSHOT.jar' : 'helloworld-1.0-SNAPSHOT.war']
+        deploy 'helloworld-1.0-SNAPSHOT.war', 'production'
         echo 'Deployed to http://localhost:8080/production/'
     }
   }
 }
 
 def deploy(war, id) {
-    sh "cp ${war} /tmp/webapps/${id}.war"
+    sh "cp ${jar} /tmp/webapps/${id}.war"
 }
 
 def undeploy(id) {
