@@ -1,7 +1,6 @@
 node('master'){
-  load 'artifactoryMavenBuild.groovy'
-  // git url: 'https://gitee.com/LilaPeng/HelloWorld.git' 
+  git url: 'https://gitee.com/LilaPeng/HelloWorld.git'
+  load 'artifactoryMavenBuild.groovy'   
   //def mvnHome = tool 'mvn'
-  //sh "${mvnHome}/bin/mvn -B verify"
-  
+  //sh "${mvnHome}/bin/mvn -B verify"  
 }
